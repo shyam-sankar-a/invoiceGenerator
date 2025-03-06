@@ -1,0 +1,43 @@
+{
+  "name": "invoicegenerator",
+  "version": "1.0.0",
+  "description": "Application for generating invoice and bills",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shyam-sankar-a/invoiceGenerator.git"
+  },
+  "keywords": [
+    "ReduxToolkit",
+    "docker",
+    "mongodb"
+  ],
+  "author": "Shyam Sankar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shyam-sankar-a/invoiceGenerator/issues"
+  },
+  "homepage": "https://github.com/shyam-sankar-a/invoiceGenerator#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "chalk": "^5.4.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "handlebars": "^4.7.8",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1",
+    "morgan": "^1.10.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

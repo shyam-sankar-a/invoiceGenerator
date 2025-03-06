@@ -1,0 +1,84 @@
+version: "3.9"
+services:
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/local/express/Dockerfile
+    volumes:
+      - /app/node_modules
+      - .:/app
+    depends_on:
+      - mongodb
+    #Since we create nginx and assign services for api we no longer need this port
+    #ports:
+    #  - "1977:1977"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      MONGO_URI: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb
+    networks:
+      - invoice
+  client:
+    restart: on-failure
+    build:
+      context: ./client
+      dockerfile: ./docker/local/Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    networks:
+      - invoice
+  mongodb:
+    image: mongo:5.0.6-focal
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - invoice
+  mongo-express:
+    image: mongo-express:0.54.0
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    networks:
+      - invoice
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - invoice
+  nginx:
+    build:
+      context: ./docker/local/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - api
+    volumes:
+      - static_volumes:/app/staticfiles
+      - pdf_volumes:/app/docs
+    networks:
+      - invoice
+networks:
+  invoice:
+    driver: bridge
+volumes:
+  mongodb-data:
+  static_volumes:
+  pdf_volumes:
