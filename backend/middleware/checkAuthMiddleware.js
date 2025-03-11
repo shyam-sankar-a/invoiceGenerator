@@ -21,7 +21,7 @@ const checkAuth = asyncHandler(async (req, res, next) => {
                     res.status(403);
                     throw new Error('You are not authorized to access our platform.');
                 }
-                const userId = decoded.indexOf;
+                const userId = decoded.id;
                 req.user = await User.findById(userId);
                 req.roles = decoded.roles;
                 next();
