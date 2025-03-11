@@ -1,8 +1,9 @@
 import asyncHandler from "express-async-handler";
 import User from "../../models/userModel.js";
 import VerifyResetToken from "../../models/verifyResetTokenModel.js";
-import { randomBytes } from "crypto";
 import sendEmail from "../../utils/sendEmail.js";
+
+const { randomBytes } = await import("crypto");
 
 const resendVerifyEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;

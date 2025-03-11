@@ -1,15 +1,17 @@
 import asyncHandler from "express-async-handler";
 import User from "../../models/userModel.js";
 import VerifyResetToken from "../../models/verifyResetTokenModel.js";
-import { randomBytes } from "crypto";
 import sendEmail from "../../utils/sendEmail.js";
 import { systemLogs } from "../../utils/logger.js";
+
+const { randomBytes } = await import("crypto");
 
 const resetPasswordRequest = asyncHandler(async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
         res.status(400);
+        systemLogs.info("Email address is null");
         throw new Error("Please provide a valid email address");
     }
 
@@ -17,22 +19,24 @@ const resetPasswordRequest = asyncHandler(async (req, res) => {
 
     if (!user) {
         res.status(400);
+        systemLogs.info("User is not exist for the provided email");
         throw new Error("Cannot find a user with provided email. Please check email and try again");
     }
 
     const verificationToken = await VerifyResetToken.findOne({ _userId: user._id });
+    systemLogs.info(`Find one verification token, ${verificationToken}`);
 
     if (verificationToken) {
         await verificationToken.deleteOne();
     }
 
     const newToken = randomBytes(32).toString('hex');
+    systemLogs.info(`Generated new token, ${ newToken }`);
 
-    const saveToken = await verificationToken.save({
+    new VerifyResetToken({
         _userId: user._id,
-        token: newToken,
-        createdAt: Date.now()
-    });
+        token: newToken
+    }).save();
 
     if (user && user.isEmailVerified) {
         await sendEmail(
@@ -40,7 +44,7 @@ const resetPasswordRequest = asyncHandler(async (req, res) => {
             "Reset Your Password - Invoicegen",
             {
                 name: `${user.firstname} ${user.lastname}`,
-                link: `${process.env.DOMAIN}/auth/reset_password?emailToken=${saveToken.toke}&userId=${user._id}`,
+                link: `${process.env.DOMAIN}/auth/reset_password?emailToken=${newToken}&userId=${user._id}`,
                 domain: process.env.DOMAIN
             },
             "./emails/templates/passwordReset.handlebars"
@@ -53,7 +57,7 @@ const resetPasswordRequest = asyncHandler(async (req, res) => {
     });
 });
 
-const resetPassword = asyncHandler(async (res, req) => {
+const resetPassword = asyncHandler(async (req, res) => {
     const { password, confirmPassword, userId, emailToken } = req.body;
 
     if (!password) {
@@ -94,7 +98,7 @@ const resetPassword = asyncHandler(async (res, req) => {
         await user.save();
 
         await sendEmail(
-            email,
+            user.email,
             "Reset Password Success- Invoicegen",
             {
                 name: `${user.firstname} ${user.lastname}`,
