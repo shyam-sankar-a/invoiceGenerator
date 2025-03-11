@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Onboard | Invoicegen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header img {
+            width: 100%;
+            max-width: 180px;
+        }
+        .hero img {
+            width: 100%;
+            max-width: 550px;
+            border-radius: 6px;
+        }
+        .content {
+            padding: 20px;
+        }
+        h1 {
+            color: #333333;
+        }
+        p {
+            color: #666666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Hero Image -->
+        <div class="hero">
+            <img src="{{domain}}/staticfiles/email_assets/emailTemplateBanner.png" alt="Welcome to Invoicegen">
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h1>Welcome Onboard, {{name}}!</h1>
+            <p>We're excited to have you at <strong>Invoicegen</strong>—your go-to platform for seamless invoicing.</p>
+            <p>You are now verified and can start generating invoices, managing payments, and more.</p>
+            <p>Click below to access your dashboard and start exploring.</p>
+            <a href="{{link}}" class="btn">Go to Dashboard</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>If you have any questions, feel free to <a href="mailto:support@invoicegen.com">contact our support team</a>.</p>
+            <p>Best regards, <br> The Invoicegen Team</p>
+        </div>
+    </div>
+
+</body>
+</html>

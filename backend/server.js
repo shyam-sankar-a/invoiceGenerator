@@ -5,6 +5,8 @@ import morgan from "morgan";
 import mongoSanitize from "express-mongo-sanitize";
 import connectionToDB from "./config/connectDB.js";
 import { systemLogs, morganMiddleware } from "./utils/logger.js";
+import { errorHandler, notFound } from "../backend/middleware/errorHandlerMiddleware.js";
+import authRoutes from "../backend/routes/authRoutes.js";
 
 // Handle unhandled promise rejections globally
 process.on("unhandledRejection", (error) => {
@@ -37,6 +39,11 @@ const initializeServer = async () => {
         app.get("/api/v1/test", (req, res) => {
             res.json({ message: "Test called successfully!!!!" });
         });
+
+        app.use("/api/v1/auth", authRoutes);
+
+        app.use(notFound);
+        app.use(errorHandler);
 
         const PORT = process.env.PORT || 1977;
 

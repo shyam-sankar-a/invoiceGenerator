@@ -18,6 +18,6 @@ const verifyResetTokenSchema = mongoose.Schema({
     }
 });
 
-const verifyResetToken = mongoose.model("verifyResetToken", verifyResetTokenSchema);
+const VerifyResetToken = mongoose.model("VerifyResetToken", verifyResetTokenSchema);
 
-export default verifyResetToken;
+export default VerifyResetToken;

@@ -73,6 +73,7 @@ services:
     volumes:
       - static_volumes:/app/staticfiles
       - pdf_volumes:/app/docs
+      - ./backend/utils/emails/templates/images:/app/staticfiles/email_assets
     networks:
       - invoice
 networks:

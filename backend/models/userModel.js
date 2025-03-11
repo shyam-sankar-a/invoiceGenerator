@@ -61,11 +61,10 @@ const userSchema = new Schema({
     isEmailVerified: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
     },
     provider: {
         type: String,
-        required: true,
         default: "email"
     },
     googleID: String,
@@ -73,17 +72,11 @@ const userSchema = new Schema({
     businessName: String,
     phoneNumber: {
         type: String,
-        required: true,
         validate: [
             validator.isMobilePhone, "Please enter phone number starting with '+' followed by country code and then actual number. eg; +91987654321"
         ]
     },
     address: String,
-    isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
     city: String,
     country: String,
     roles: {
@@ -102,7 +95,7 @@ const userSchema = new Schema({
 /**
  * Hook to enter user role before saving new entry
  */
-userSchema.pre("save", async(next) => {
+userSchema.pre("save", async function(next) {
     if(this.roles.length === 0) {
         this.roles.push(USER);
         next();
@@ -113,7 +106,7 @@ userSchema.pre("save", async(next) => {
  * Hook to encrypt password
  * If no change in password then skip
  */
-userSchema.pre("save", async(next) => {
+userSchema.pre("save", async function(next) {
     if(!this.isModified("password")) {
         next();
     }
@@ -126,7 +119,7 @@ userSchema.pre("save", async(next) => {
 /**
  * Adding a method to compare password to user model schema
  */
-userSchema.methods.comparePasswords = async(password) => {
+userSchema.methods.comparePasswords = async function(password) {
     return await bcrypt.compare(password, this.password)
 }
 
